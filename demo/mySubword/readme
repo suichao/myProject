@@ -1,0 +1,13 @@
+使用subword-nmt生成bpe模型和词典
+安装：pip install subword-nmt
+
+## 建立一个共享词典
+subword-nmt/learn_joint_bpe_and_vocab.py --input corpus.tc.en corpus.tc.de -s 32000 -o bpe32k --write-vocabulary vocab.en vocab.de
+
+
+## 不共享词典
+subword-nmt learn-joint-bpe-and-vocab -i ./train.en -s 32000 -o ./use_bpe/bpe32k.en --write-vocabulary ./use_bpe/vocab.en
+subword-nmt learn-joint-bpe-and-vocab -i ./train.zh -s 32000 -o ./use_bpe/bpe32k.zh --write-vocabulary ./use_bpe/vocab.zh
+
+
+## subword-nmt learn-joint-bpe-and-vocab -i ./news.zh.txt -s 32000 -o ./bpe.zh --write-vocabulary ./vocab.zh
