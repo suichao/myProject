@@ -1,14 +1,17 @@
 import jieba
+import re
 from subword_nmt import apply_bpe
 
 
-class ZhSubWord(object):
+class SubWordBase(object):
     def __init__(self, bpe_path, vocab_path):
-        self._cut = jieba.lcut
         self._bpe = apply_bpe.BPE(open(bpe_path, "r", encoding="utf-8"))
         self.vocab_path = vocab_path
         self.UNK = "UNK"
         self.t2ids, self.ids2t = self._init_vocab()
+
+    def _cut(self, text):
+        raise NotImplementedError
 
     def _init_vocab(self):
         w2ids, ids2w = {}, {}
@@ -51,8 +54,27 @@ class ZhSubWord(object):
         return "".join(self.ids2token(ids)).replace("@@", "")
 
 
+class ZhSubWord(SubWordBase):
+    def __init__(self, bpe_path, vocab_path):
+        super(ZhSubWord, self).__init__(bpe_path, vocab_path)
+
+    def _cut(self, text):
+        return jieba.lcut(text)
+
+
+class KoSubWord(SubWordBase):
+    def __init__(self, bpe_path, vocab_path):
+        super(KoSubWord, self).__init__(bpe_path, vocab_path)
+        self.ko_tag = re.compile(u"[^\uac00-\ud7ffa-zA-Z0-9]")
+        self.spaces_pun = re.compile(r"[ ]+")
+
+    def _cut(self, text):
+        text = re.sub(self.ko_tag, lambda x: " " + x.group() + " ", text)
+        res = re.sub(self.spaces_pun, " ", text)
+        return res
+
 if __name__ == '__main__':
-    sw = ZhSubWord("../../demo/mySubword/bpe.zh", "../../demo/mySubword/vocab.zh")
+    sw = KoSubWord("../../demo/mySubword/bpe.zh", "../../demo/mySubword/vocab.zh")
     res = sw.text2ids("越是拥抱变化，生活才能越自在。")
     print(res)
     line = sw.ids2text(res)
