@@ -3,6 +3,7 @@ import sqlite3
 DB_PATH = 'test.db'
 
 conn = sqlite3.connect(DB_PATH)
+
 # 创建表
 # cur = conn.execute(f'CREATE TABLE stocks (date text, trans text, symbol text, qty real, price real)')
 
@@ -11,7 +12,7 @@ data = [('aaa', 'bbb', 'ccc', "", "")]
 for x in data:
 	conn.execute('INSERT INTO stocks (date, trans, symbol, qty, price) VALUES (?, ?, ?, ?, ?)', x)
 
-# # 查询方式一：获取表中所有列的数据
+# 查询方式一：获取表中所有列的数据
 cur = conn.execute('SELECT * FROM stocks')
 print(cur)
 # # 查询方式二：获取表中某几列的数据

@@ -4,6 +4,9 @@ from subword_nmt import apply_bpe
 
 
 class SubWordBase(object):
+    """
+
+    """
     def __init__(self, bpe_path, vocab_path):
         self._bpe = apply_bpe.BPE(open(bpe_path, "r", encoding="utf-8"))
         self.vocab_path = vocab_path
