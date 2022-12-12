@@ -1,6 +1,9 @@
 import tensorflow.compat.v1 as tf
 import argparse
 import h5py
+"""
+使用 tf.train.saver() 保存模型时会产生多个文件，会把计算图的结构和图上参数取值分成了不同的文件存储。这种方法是在TensorFlow中是最常用的保存方式。
+"""
 
 
 def convert(arg):

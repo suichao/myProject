@@ -1,6 +1,16 @@
 import socket
 import time
 from line_profiler import LineProfiler
+import jieba
+from nltk.translate.bleu_score import sentence_bleu
+
+
+def my_bleu_score(ref, can):
+    source_fenci = [jieba.cut(ref)]
+    target_fenci = jieba.cut(can)
+    # 1−gram, 2-gram, 3-gram权重分别为0.4， 0.4， 0.2
+    score = sentence_bleu(source_fenci, target_fenci, weights=(0.4, 0.4, 0.2, 0))
+    return score
 
 
 def get_host_ip():
@@ -89,3 +99,12 @@ class ChineseTraditionSimple(object):
             else:
                 output_str_list.append(text[i])
         return "".join(output_str_list)
+
+
+def get_file_path(_dir):
+    import os
+    for root, dirs, files in os.walk(_dir, topdown=False):
+        for name in files:
+            print(os.path.join(root, name))
+        for name in dirs:
+            print(os.path.join(root, name))

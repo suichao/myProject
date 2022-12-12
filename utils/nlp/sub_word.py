@@ -5,7 +5,6 @@ from subword_nmt import apply_bpe
 
 class SubWordBase(object):
     """
-
     """
     def __init__(self, bpe_path, vocab_path):
         self._bpe = apply_bpe.BPE(open(bpe_path, "r", encoding="utf-8"))
@@ -75,6 +74,7 @@ class KoSubWord(SubWordBase):
         text = re.sub(self.ko_tag, lambda x: " " + x.group() + " ", text)
         res = re.sub(self.spaces_pun, " ", text)
         return res
+
 
 if __name__ == '__main__':
     sw = KoSubWord("../../demo/mySubword/bpe.zh", "../../demo/mySubword/vocab.zh")
